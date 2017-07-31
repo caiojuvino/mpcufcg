@@ -1,19 +1,25 @@
 {
-    "name": "Mapa para Cegos",
-    "version": "1.0.0",
-	"description": "Projeto PIBITI"
-	"engines": {
-		"node": "6.11.1"
-	},
-	"main": "server.js",
-	"scripts": {
-		"start": "node server.js"
-	},
-    "dependencies": {
-        "body-parser": "^1.7.0",
-        "ejs": "^1.0.0",
-        "express": "^4.8.7",
-        "express-session": "^1.7.6"
-    },
-	"author": "caio queiroz"
+  "name": "mapa-para-cegos",
+  "version": "1.0.0",
+  "description": "Projeto PIBITI",
+  "engines": {
+    "node": "6.11.1"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "ejs": "^1.0.0",
+    "express": "^4.15.3",
+    "express-session": "^1.15.4",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "querystring": "^0.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/caiojuvino/mpcufcg"
+  }
 }
