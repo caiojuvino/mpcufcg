@@ -16,7 +16,8 @@
     "express-session": "^1.15.4",
     "http": "0.0.0",
     "https": "^1.0.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "request": "^2.81.0"
   },
   "repository": {
     "type": "git",
