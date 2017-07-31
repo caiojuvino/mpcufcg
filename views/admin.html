@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Mapa para Cegos</title>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="https://openlayers.org/en/v4.1.0/css/ol.css" type="text/css">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+	<script src="https://openlayers.org/en/v4.1.0/build/ol.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<link rel="script" href="js/columns.js" type="text/javascript">
+	<link rel="stylesheet" href="css/columns.css" type="text/css">
+
+	<link rel="stylesheet" href="css/pace.css" type="text/css">
+	<script src="js/pace.js"></script>
+</head>
+<body>
+	<div id="wrap">
+		<div id="left_col">
+            <div id="map" class="map"></div>
+            
+            
+            
+            <div id="selection">
+                <b>Seleção de Barreiras</b>
+                <div class="line"></div>
+                <div id="SelTip">Disponibilizar Barreiras para Aplicação Móvel</div>
+                <button id='drawBtn' onclick="activatePol()" class="button">Selecionar</button>
+                <button id='commit' class="button">Persistir</button>
+            </div>
+            <div id="mouse-position"></div>
+
+            <div id="popup" class="ol-popup">
+            	<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+            	<div id="popup-content"></div>
+            </div>
+        </div>
+        <div id="right_col">
+        	<div id='logout'>
+        		Conectado como Admin
+                <button onclick="location.href='/logout'" class="button" type="submit" class="btn btn-primary btn-block btn-large">Logout</button>
+        	</div>
+
+
+        	<form id="markerFilter" action="" class="checkbox" >
+        		<b class="checkTitle">Filtrar Marcadores</b></br>
+        		<div class="line"></div>
+        		<input id='bChecker' type="checkbox" class="b" onchange="filterByMarker(this)" checked="checked"> Barreiras <img src="../img/bMarker.png"/></br>
+
+                <input type="checkbox" disabled="disabled"> Dados Oficiais </br>
+        		<input id='dChecker' type="checkbox" class="d" onchange="filterByMarker(this)" checked="checked"> Dados de Referencia <img src="../img/doMarker.png"/></br>
+        		<input type="checkbox" class="p" onchange="filterByMarker(this)" checked="checked"> Pontos de Interesse <img src="../img/poiMarker.png"/></br>
+
+        		<div  id="gen"><input type="checkbox" disabled="disabled" checked="checked" class="gen" onchange="filterByMarker(this)" checked="checked"> Geradoras <img src="../img/sMarker.png"/></br></div>
+        	</form>
+
+            <form id="visibilityFilter" action="" class="checkbox" >
+                <b class="checkTitle">Filtrar Marcadores por Visibilidade</b></br>
+                <div class="line"></div>
+                
+                <input id='disp' type="checkbox" class="b" onchange="filterByVisibility(this)" checked="checked"> Disponível no App Móvel</br>
+                <input id='indisp' type="checkbox" class="b" onchange="filterByVisibility(this)" checked="checked"> Indisponível no App Móvel</br>
+            </form>
+
+        	<form id="alg" action="" class="checkbox" >
+        		<b class="checkTitle">Posição da Barreira</b></br>
+        		<div class="line"></div>
+        		<input id="posicaoConvexHull" type="checkbox" class="convex" onchange="runAlg(this)"> Convex Hull (C)<img src="../img/convexMarker.png"/></br>
+        		<input id="posicaoMedia" type="checkbox" class="mean" disabled="disabled" checked="checked"> Média (M)<img src="../img/meanMarker.png"/></br>
+        		<input id="posicaoMediana" type="checkbox" class="median" onchange="runAlg(this)"> Mediana (E)<img src="../img/medianMarker.png"/></br>
+        	</form>
+
+            <div style="text-align: center;">
+        	   <button id="gToggler" class="button" type="submit" class="btn btn-primary btn-block btn-large">Show</button>
+            </div>
+
+        	<form  id="typeFilter" action="" class="checkbox" >
+        		<b class="checkTitle">Filtrar Marcadores por Tipo</b></br>
+        		<div class="line"></div>
+        		<input type="checkbox" id="ARVORE" onchange="filterByType(this)" checked="checked"> Árvore</br>
+        		<input type="checkbox" id="BANCO" onchange="filterByType(this)" checked="checked"> Banco</br>
+        		<input type="checkbox" id="BURACO" onchange="filterByType(this)" checked="checked"> Buraco</br>
+        		<input type="checkbox" id="DEGRAU" onchange="filterByType(this)" checked="checked"> Degrau</br>
+        		<input type="checkbox" id="ESCADA" onchange="filterByType(this)" checked="checked"> Escada</br>
+        		<input type="checkbox" id="HIDRANTE" onchange="filterByType(this)" checked="checked"> Hidrante</br>
+        		<input type="checkbox" id="OBJETO_ELEVADO" onchange="filterByType(this)" checked="checked"> Objeto Elevado</br>
+        		<input type="checkbox" id="OBJETO_RASTEIRO" onchange="filterByType(this)" checked="checked"> Objeto Rasteiro</br>
+        		<input type="checkbox" id="ORELHAO" onchange="filterByType(this)" checked="checked"> Orelhão</br>
+        		<input type="checkbox" id="POSTE_PILAR_PLACA" onchange="filterByType(this)" checked="checked"> Pilar, Placa ou Poste</br>
+        		<input type="checkbox" id="TERRENO_DESNIVELADO" onchange="filterByType(this)" checked="checked"> Terreno Desnivelado</br>
+        		<input type="checkbox" id="OUTRO" onchange="filterByType(this)" checked="checked"> Outro</br>
+        	</form>
+
+        	<form id="riskFilter" action="" class="checkbox">
+        		<b class="checkTitle">Filtrar Barreiras por Nível de Perigo</b></br>
+        		<div class="line"></div>
+        		<input type="checkbox" id="MUITO_BAIXO" onchange="filterByRisk(this)" checked="checked"> Muito Baixo</br>
+        		<input type="checkbox" id="BAIXO" onchange="filterByRisk(this)" checked="checked"> Baixo</br>
+        		<input type="checkbox" id="MEDIO" onchange="filterByRisk(this)" checked="checked"> Médio</br>
+        		<input type="checkbox" id="ALTO" onchange="filterByRisk(this)" checked="checked"> Alto</br>
+        		<input type="checkbox" id="MUITO_ALTO" onchange="filterByRisk(this)" checked="checked"> Muito Alto</br>
+        	</form>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/admin.js"></script>
+</body>
+</html>

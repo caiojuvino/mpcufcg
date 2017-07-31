@@ -1,0 +1,19 @@
+{
+    "name": "Mapa para Cegos",
+    "version": "1.0.0",
+	"description": "Projeto PIBITI"
+	"engines": {
+		"node": "6.11.1"
+	},
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+    "dependencies": {
+        "body-parser": "^1.7.0",
+        "ejs": "^1.0.0",
+        "express": "^4.8.7",
+        "express-session": "^1.7.6"
+    },
+	"author": "caio queiroz"
+}
